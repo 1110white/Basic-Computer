@@ -1,0 +1,72 @@
+#include <stdio.h>
+#include <stdlib.h>
+
+struct pack_one_row {
+	int row;
+	int column;
+	int value;
+};
+
+void print_pack_array(struct pack_one_row** pack);
+int found_t(int arr[][4]);
+
+int main() {
+	int arr[7][4] = { {0,0,0,9}, {0,1,0,0}, {0,0,0,0}, {0,0,7,0}, {0,0,0,0}, {3,0,0,0}, {0,0,0,0} };
+	int t = found_t(arr);
+
+	int* row = (int*)malloc((t+1) * sizeof(int));
+	int* column = (int*)malloc((t+1) * sizeof(int));
+	int* value = (int*)malloc((t+1) * sizeof(int));
+	*row = 7;
+	*column = 4;
+	*value = t;
+
+	int cnt = 1;
+	for (int i = 0; i < 7; i++) {
+		for (int j = 0; j < 4; j++) {
+			if (arr[i][j] != 0) {
+				cnt++;
+				*(row+cnt) = i;		//arr[1] = *(arr+1)
+				*(column+cnt) = j;
+				*(value+cnt) = arr[i][j];
+			}
+		}
+	}
+
+	struct pack_one_row** pack = (struct pack_one_row**)malloc((t + 1) * sizeof(struct pack_one_row));
+	for (int i = 0; i < (t + 1); i++) {
+		pack[i]->row = *(row+i);
+		pack[i]->column = *(column+i);
+		pack[i]->value = *(value+i);
+	}
+
+	print_pack_array(pack);
+
+	free(row);
+	free(column);
+	free(value);
+	free(pack);
+
+	getchar();  return 0;
+}
+
+void print_pack_array(struct pack_one_row**pack) {
+	int rownum = sizeof(pack) / sizeof(struct pack_one_row);
+	for (int i = 0; i < rownum; i++) {
+		for (int j = 0; j < 3; j++) {
+			printf("%d", pack[i][j]);
+		}
+		printf("\n");
+	}
+}
+
+int found_t(int arr[][4]) {
+	int cnt = 0;
+	int row = sizeof(arr) / sizeof(arr[0]);
+	for (int i = 0; i < row; i++) {
+		for (int j = 0; j < 4; j++) {
+			if (arr[i][j] != 0) cnt++;
+		}
+	}
+	return  cnt;
+}
